@@ -18,5 +18,7 @@ type Game struct {
 
 type Action interface {
 	GetName() string
+	GetCooldown() int
 	RunAction(*Creature, *Creature, *Game)
+	CooldownTick()
 }

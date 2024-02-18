@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/kagameow/monsterduel/actions"
-
 	"github.com/kagameow/monsterduel/input"
 	"github.com/kagameow/monsterduel/output"
 	"github.com/kagameow/monsterduel/structs"
@@ -18,23 +17,34 @@ func newGame() *structs.Game {
 			MaxDamage: 10,
 			Actions: map[string]structs.Action{
 				"1": &actions.Attack,
+				"2": &actions.StrongAttack,
 			},
 			IsPlayer: true,
 		},
 		Monster: structs.Creature{
 			Name:      "Monster",
 			Hp:        100,
-			MinDamage: 5,
-			MaxDamage: 8,
+			MinDamage: 8,
+			MaxDamage: 12,
 			Actions: map[string]structs.Action{
-				"1": &actions.Attack,
+				"1": &actions.Bite,
 			},
 		},
 	}
 }
 
+func handleCooldowns(game *structs.Game) {
+	for _, action := range game.Player.Actions {
+		action.CooldownTick()
+	}
+	for _, action := range game.Monster.Actions {
+		action.CooldownTick()
+	}
+}
+
 func startRound(game *structs.Game) {
 	game.Round += 1
+	handleCooldowns(game)
 	output.DisplayGameRoundInfo(game)
 }
 
@@ -53,6 +63,9 @@ func checkForWinner(game *structs.Game) (isGameOver bool) {
 func handlePlayerTurn(game *structs.Game) (isGameOver bool) {
 	var allowedKeys []string
 	for key := range game.Player.Actions {
+		if game.Player.Actions[key].GetCooldown() > 0 {
+			continue
+		}
 		allowedKeys = append(allowedKeys, key)
 		fmt.Printf("%v: %v\n", key, game.Player.Actions[key].GetName())
 	}
