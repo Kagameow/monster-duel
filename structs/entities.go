@@ -3,10 +3,10 @@ package structs
 type Creature struct {
 	Name      string
 	Hp        int
+	MaxHp     int
 	MinDamage int
 	MaxDamage int
 	Actions   map[string]Action
-	IsPlayer  bool
 }
 
 type Game struct {

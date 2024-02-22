@@ -13,17 +13,19 @@ func newGame() *structs.Game {
 		Player: structs.Creature{
 			Name:      "Player",
 			Hp:        100,
+			MaxHp:     100,
 			MinDamage: 7,
 			MaxDamage: 10,
 			Actions: map[string]structs.Action{
 				"1": &actions.Attack,
 				"2": &actions.StrongAttack,
+				"3": &actions.Heal,
 			},
-			IsPlayer: true,
 		},
 		Monster: structs.Creature{
 			Name:      "Monster",
 			Hp:        100,
+			MaxHp:     100,
 			MinDamage: 8,
 			MaxDamage: 12,
 			Actions: map[string]structs.Action{
