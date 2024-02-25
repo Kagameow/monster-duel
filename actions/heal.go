@@ -1,6 +1,10 @@
 package actions
 
-import "github.com/kagameow/monsterduel/structs"
+import (
+	"fmt"
+	"github.com/kagameow/monsterduel/output"
+	"github.com/kagameow/monsterduel/structs"
+)
 
 type SimpleHeal struct {
 	name       string
@@ -12,6 +16,8 @@ func (heal *SimpleHeal) RunAction(healer *structs.Creature, _ *structs.Creature,
 	if healer.Hp > healer.MaxHp {
 		healer.Hp = healer.MaxHp
 	}
+	message := fmt.Sprintf("%v healed for %v hp!\n", healer.Name, heal.healAmount)
+	output.PrintAndWriteToLog(message)
 }
 
 func (heal *SimpleHeal) GetName() string { return heal.name }
