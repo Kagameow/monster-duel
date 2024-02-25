@@ -18,8 +18,8 @@ func newGame() *structs.Game {
 			MaxDamage: 10,
 			Actions: map[string]structs.Action{
 				"1": &actions.Attack,
-				"2": &actions.StrongAttack,
-				"3": &actions.Heal,
+				"2": &actions.Heal,
+				"3": &actions.StrongAttack,
 			},
 		},
 		Monster: structs.Creature{
@@ -78,7 +78,6 @@ func handlePlayerTurn(game *structs.Game) (isGameOver bool) {
 }
 
 func handleAITurn(game *structs.Game) (isGameOver bool) {
-	fmt.Print("\nRoooar, tobi pizda!\n")
 	game.Monster.Actions["1"].RunAction(&game.Monster, &game.Player, game)
 	output.DisplayGameTurnInfo(game)
 	return checkForWinner(game)

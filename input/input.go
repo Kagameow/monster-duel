@@ -11,8 +11,12 @@ import (
 
 var reader = bufio.NewReader(os.Stdin)
 
-func readUserInput() (userInput string) {
-	userInput, _ = reader.ReadString('\n')
+func readUserInput() (userInput string, err error) {
+	userInput, err = reader.ReadString('\n')
+
+	if err != nil {
+		return "", err
+	}
 
 	if runtime.GOOS == "windows" {
 		userInput = strings.Replace(userInput, "\r\n", "", -1)
@@ -23,12 +27,18 @@ func readUserInput() (userInput string) {
 	return
 }
 
-func HandlePlayerInput(allowedInputs []string) (input string) {
+func HandlePlayerInput(allowedInputs []string) string {
 	fmt.Print("Enter your command code: ")
-	input = readUserInput()
+	input, err := readUserInput()
+
+	if err != nil {
+		fmt.Println("An error occurred while reading your input. Please try again.")
+		return HandlePlayerInput(allowedInputs)
+	}
 	if !slices.Contains(allowedInputs, input) {
 		fmt.Println("Invalid input, please try again.")
 		return HandlePlayerInput(allowedInputs)
 	}
-	return
+
+	return input
 }
